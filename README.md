@@ -1,65 +1,143 @@
-# ShopSphere — Django + Django REST Framework
+# 🛍️ ShopSphere – Django E-Commerce Platform
 
-A responsive demo shopping website with product search, category filters, product details, session cart, quantity updates, checkout, customer registration/login, profile, order history, admin management, and REST API endpoints.
+🚀 **ShopSphere** is a web-based e-commerce application developed using **Python, Django, MySQL, HTML, CSS, JavaScript, and Bootstrap**. It provides a user-friendly shopping experience with product browsing, cart management, and order processing.
 
-## 1. Setup (Windows PowerShell)
+## ✨ Features
+
+- 🔐 **User Authentication** – User registration, login, and logout.
+- 🛒 **Product Catalog** – Browse products and view product details.
+- 🔎 **Product Search** – Search for products by name.
+- 🗂️ **Category Filtering** – Filter products by category.
+- 🛍️ **Shopping Cart** – Add products, update quantities, and remove items.
+- 📦 **Checkout System** – Enter customer details and place orders.
+- 📊 **Stock Management** – Validate product availability and update stock after orders.
+- 🧾 **Order History** – View previously placed orders.
+- 👤 **User Profile** – Update profile information.
+- 🔌 **REST API Support** – Django REST Framework is included in the project.
+
+## 🧰 Technologies Used
+
+| Technology | Purpose |
+|---|---|
+| 🐍 Python | Backend programming |
+| 🎯 Django | Web application framework |
+| 🔌 Django REST Framework | REST API development |
+| 🗄️ MySQL | Database management |
+| 🌐 HTML5 | Page structure |
+| 🎨 CSS3 | Styling and layout |
+| 📱 Bootstrap | Responsive user interface |
+| ⚡ JavaScript | Frontend interactivity |
+| 🐙 Git & GitHub | Version control and project hosting |
+
+## 📁 Project Structure
+
+```text
+ShopSphere/
+├── config/
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── store/
+│   ├── models.py
+│   ├── views.py
+│   ├── urls.py
+│   └── admin.py
+├── templates/
+├── static/
+├── media/
+├── manage.py
+├── requirements.txt
+└── README.md
+```
+
+📌 *The exact folder structure may vary depending on the project files.*
+
+## ⚙️ Installation and Setup
+
+### 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/saniyachandane/ShopSphere.git
+cd ShopSphere
+```
+
+### 2️⃣ Create a Virtual Environment
+
+```bash
+python -m venv venv
+```
+
+Activate it on Windows:
 
 ```powershell
-cd ShopSphere
-py -m venv venv
 .\venv\Scripts\Activate.ps1
-python -m pip install --upgrade pip
-pip install -r requirements.txt
+```
+
+### 3️⃣ Install Dependencies
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+### 4️⃣ Configure the MySQL Database
+
+🗄️ Create a MySQL database named `shopsphere`.
+
+Configure your local database credentials in Django settings or environment variables. 🔒 **Never upload database passwords or production secret keys to GitHub.**
+
+### 5️⃣ Apply Database Migrations
+
+```bash
 python manage.py migrate
+```
+
+### 6️⃣ Create an Admin Account
+
+```bash
 python manage.py createsuperuser
+```
+
+### 7️⃣ Start the Development Server
+
+```bash
 python manage.py runserver
 ```
 
-Open `http://127.0.0.1:8000/`. Admin is at `http://127.0.0.1:8000/admin/`.
-The project uses SQLite by default, so it starts without MySQL configuration. Add categories and products in Django Admin before shopping.
+🌐 Open your browser and visit:
 
-## 2. Optional MySQL setup
+👉 http://127.0.0.1:8000/
 
-1. Create a database named `shopsphere_db` in MySQL.
-2. Copy `.env.example` values into your terminal environment or configure equivalent environment variables.
-3. Set `DB_ENGINE=mysql`, `DB_NAME`, `DB_USER`, `DB_PASSWORD`, `DB_HOST`, and `DB_PORT`.
-4. Install a MySQL driver compatible with your environment (`pip install mysqlclient`) and run `python manage.py migrate`.
+## 🎓 Learning Outcomes
 
-Do not commit passwords or production secret keys. The default secret key and `DEBUG=True` are for local development only.
+Through this project, I practiced:
 
-## 3. REST API (DRF)
+- 🧩 Building web applications using Django.
+- 🗄️ Connecting Django applications with MySQL.
+- 🔐 Implementing user authentication.
+- 🛒 Managing shopping carts using sessions.
+- 📦 Processing orders and validating product stock.
+- 🔌 Working with Django REST Framework.
+- 🎨 Creating responsive pages using HTML, CSS, and Bootstrap.
+- 🐙 Managing project code with Git and GitHub.
 
-| Method | Endpoint | Purpose | Access |
-|---|---|---|---|
-| GET | `/api/` | Router index | Public |
-| GET | `/api/categories/` | List categories | Public |
-| GET | `/api/categories/1/` | Category detail | Public |
-| GET | `/api/products/` | Paginated product list | Public |
-| GET | `/api/products/1/` | Product detail | Public |
-| POST / PUT / PATCH / DELETE | `/api/products/1/` | Manage products | Staff/admin only |
-| GET | `/api/orders/` | Current user's orders | Login required; staff can see all |
-| GET | `/api/orders/1/` | Order detail | Login required and scoped to owner (staff can see all) |
-| GET | `/api-auth/login/` | DRF browsable API login | Django session auth |
+## 🚀 Future Enhancements
 
-Example product search: `/api/products/?search=shirt`
-Example ordering: `/api/products/?ordering=price` or `?ordering=-created_at`
-Pagination uses page numbers, e.g. `/api/products/?page=2`.
+- 💳 Payment gateway integration.
+- ⭐ Product ratings and reviews.
+- ❤️ Wishlist functionality.
+- 🚚 Order tracking.
+- 🧪 Automated testing.
+- 📚 REST API documentation.
 
-Product writes require a staff account. Order endpoints are read-only so customers cannot spoof totals, prices, or order ownership through the API. Checkout creates orders through the validated website flow.
+## 👩‍💻 Author
 
-## 4. Main project structure
+**Saniya Chandane**
 
-- `config/`: settings and URL routing
-- `store/models.py`: Category, Product, Order, OrderItem
-- `store/views.py`: website views and cart/checkout logic
-- `store/serializers.py`: DRF serializers
-- `store/api.py`: DRF viewsets and permissions
-- `store/templates/`: responsive Bootstrap templates
-- `static/css/style.css`: custom responsive styling
-- `static/js/app.js`: small UI interactions
+- 🐙 GitHub: [saniyachandane](https://github.com/saniyachandane)
+- 💼 LinkedIn: [saniyachandane](https://linkedin.com/in/saniyachandane)
 
-## 5. Notes
+---
 
-- This is a learning/demo project. Checkout does not process real payments.
-- Use Django Admin to manage catalog records.
-- For deployment, configure a strong `DJANGO_SECRET_KEY`, `DJANGO_DEBUG=False`, `DJANGO_ALLOWED_HOSTS`, HTTPS, and a production database.
+⭐ **If you find this project useful, consider giving the repository a star!**
+
+💡 *Developed as a learning project to demonstrate full-stack web development using Python and Django.*
