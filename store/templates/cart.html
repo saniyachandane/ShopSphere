@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% block title %}Your Cart | ShopSphere{% endblock %}
+{% block content %}
+<main class="container py-5">
+  <div class="mb-4"><p class="small text-primary text-uppercase fw-bold mb-1">Almost yours</p><h1 class="section-title">Your shopping cart</h1><p class="text-secondary">Review quantities before checking out.</p></div>
+  {% if items %}
+  <div class="row g-4">
+    <div class="col-lg-8">
+      <div class="panel bg-white p-3 p-md-4">
+        {% for item in items %}
+        <div class="row align-items-center g-3 py-3 {% if not forloop.last %}border-bottom{% endif %}">
+          <div class="col-3 col-md-2">
+            {% if item.product.image %}<img src="{{ item.product.image.url }}" class="img-fluid rounded-3" alt="{{ item.product.name }}" style="aspect-ratio:1;object-fit:cover">{% else %}<div class="rounded-3 bg-light text-center p-3">🛍️</div>{% endif %}
+          </div>
+          <div class="col-9 col-md-4"><a href="{% url 'product_detail' item.product.id %}" class="fw-bold text-dark text-decoration-none">{{ item.product.name }}</a><div class="small text-secondary">₹{{ item.product.price|floatformat:2 }} each</div></div>
+          <div class="col-7 col-md-3">
+            <form method="post" action="{% url 'update_cart' item.product.id %}" class="d-flex gap-2 align-items-center">{% csrf_token %}<label class="visually-hidden" for="qty{{ item.product.id }}">Quantity</label><input id="qty{{ item.product.id }}" type="number" name="quantity" value="{{ item.quantity }}" min="1" max="{{ item.product.stock }}" class="form-control form-control-sm" style="max-width:90px"><button class="btn btn-outline-primary btn-sm" type="submit">Update</button></form>
+          </div>
+          <div class="col-3 col-md-2 text-end fw-bold">₹{{ item.subtotal|floatformat:2 }}</div>
+          <div class="col-2 col-md-1 text-end"><form method="post" action="{% url 'remove_from_cart' item.product.id %}" data-confirm="Remove this item from your cart?">{% csrf_token %}<button class="btn btn-sm btn-outline-danger" aria-label="Remove {{ item.product.name }}" type="submit">×</button></form></div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="col-lg-4"><div class="panel bg-white p-4"><h2 class="h5 fw-bold">Order summary</h2><hr><div class="d-flex justify-content-between mb-3"><span class="text-secondary">Subtotal</span><strong>₹{{ total|floatformat:2 }}</strong></div><div class="d-flex justify-content-between mb-3"><span class="text-secondary">Delivery</span><span class="text-success">Free</span></div><hr><div class="d-flex justify-content-between mb-4 fs-5"><strong>Total</strong><strong>₹{{ total|floatformat:2 }}</strong></div><a href="{% url 'checkout' %}" class="btn btn-primary btn-lg w-100">Proceed to checkout</a><a href="{% url 'home' %}" class="btn btn-link w-100 mt-2">Continue shopping</a></div></div>
+  </div>
+  {% else %}<div class="empty-state text-center p-5"><div class="fs-1">🛒</div><h2 class="h4 mt-3">Your cart is empty</h2><p class="text-secondary">Your next favourite thing is waiting.</p><a href="{% url 'home' %}" class="btn btn-primary pill px-4">Start shopping</a></div>{% endif %}
+</main>
+{% endblock %}

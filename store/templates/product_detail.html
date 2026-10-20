@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}{{ product.name }} | ShopSphere{% endblock %}
+{% block content %}
+<main class="container py-5">
+  <nav aria-label="breadcrumb" class="mb-4"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="{% url 'home' %}">Shop</a></li><li class="breadcrumb-item">{{ product.category.name }}</li><li class="breadcrumb-item active" aria-current="page">{{ product.name }}</li></ol></nav>
+  <div class="panel bg-white overflow-hidden"><div class="row g-0">
+    <div class="col-md-6">{% if product.image %}<img src="{{ product.image.url }}" class="product-detail-image" alt="{{ product.name }}">{% else %}<div class="product-detail-image d-flex justify-content-center align-items-center fs-1">🛍️</div>{% endif %}</div>
+    <div class="col-md-6 p-4 p-lg-5 d-flex flex-column align-items-start"><span class="badge rounded-pill text-bg-light mb-3">{{ product.category.name }}</span><h1 class="section-title">{{ product.name }}</h1><p class="text-secondary mt-2">{{ product.description }}</p><div class="price fs-3 my-3">₹{{ product.price|floatformat:2 }}</div>
+    {% if product.stock > 0 %}<p class="text-success">✓ In stock · {{ product.stock }} available</p><form method="post" action="{% url 'add_to_cart' product.id %}">{% csrf_token %}<button class="btn btn-primary btn-lg px-4" type="submit">Add to cart</button></form>{% else %}<p class="text-danger">Currently out of stock</p><button class="btn btn-secondary" disabled>Unavailable</button>{% endif %}
+    <a href="{% url 'home' %}" class="btn btn-link px-0 mt-3">← Back to products</a></div>
+  </div></div>
+</main>
+{% endblock %}

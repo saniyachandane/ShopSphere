@@ -1,0 +1,18 @@
+:root{--ink:#172033;--brand:#5b4bdb;--brand-dark:#4034ad;--surface:#f6f7fb}
+body{background:var(--surface);color:var(--ink);min-height:100vh}
+.navbar-brand{font-weight:800;letter-spacing:.2px}.brand-dot{color:#f5b942}
+.hero{background:radial-gradient(circle at 85% 20%,#8c80ff 0,transparent 30%),linear-gradient(120deg,#25204f,#5b4bdb);color:#fff;border-radius:0 0 2rem 2rem}
+.hero h1{font-size:clamp(2rem,5vw,3.6rem);font-weight:800;letter-spacing:-1px}
+.section-title{font-weight:800;letter-spacing:-.5px}
+.product-card{border:0;border-radius:1rem;overflow:hidden;transition:transform .2s,box-shadow .2s}
+.product-card:hover{transform:translateY(-5px);box-shadow:0 1rem 2rem #20204418!important}
+.product-image{height:220px;object-fit:cover;background:#ececf4}
+.price{color:var(--brand);font-size:1.2rem;font-weight:800}
+.btn-primary{background:var(--brand);border-color:var(--brand)}.btn-primary:hover{background:var(--brand-dark);border-color:var(--brand-dark)}
+.pill{border-radius:999px}.panel{border:0;border-radius:1rem;box-shadow:0 8px 30px #2020440d}
+.form-control,.form-select{padding:.72rem .9rem;border-radius:.7rem}
+.form-control:focus,.form-select:focus{border-color:#9d94ff;box-shadow:0 0 0 .2rem #5b4bdb20}
+.footer{background:#17152e;color:#c9c8da}
+.empty-state{border:2px dashed #d7d8e4;border-radius:1rem;background:#fff}
+.product-detail-image{width:100%;height:min(480px,70vw);object-fit:cover;background:#ececf4}
+@media(max-width:575px){.hero{border-radius:0 0 1.25rem 1.25rem}.product-image{height:190px}.mobile-full{width:100%}}

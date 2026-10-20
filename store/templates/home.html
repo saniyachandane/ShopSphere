@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+{% block title %}ShopSphere | Discover your next favourite{% endblock %}
+{% block content %}
+<header class="hero py-5 py-lg-6">
+  <div class="container py-lg-4">
+    <div class="row align-items-center g-4">
+      <div class="col-lg-7">
+        <span class="badge rounded-pill text-bg-warning mb-3 px-3 py-2">YOUR EVERYDAY MARKETPLACE</span>
+        <h1>Find something<br>you’ll <span style="color:#ffe08a">love.</span></h1>
+        <p class="lead text-white-50 mt-3 mb-4">Thoughtful picks, simple checkout, and a smoother way to shop.</p>
+        <a href="#products" class="btn btn-warning btn-lg pill px-4">Explore products <span aria-hidden="true">↓</span></a>
+      </div>
+      <div class="col-lg-5 d-none d-md-block">
+        <div class="bg-white bg-opacity-10 border border-white border-opacity-25 rounded-4 p-4">
+          <div class="fs-1">🛍️</div><h3 class="fw-bold">Your next great find</h3>
+          <p class="mb-0 text-white-50">Search by name, filter by category, and add favourites to your cart.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+<main class="container py-5">
+  <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
+    <div><p class="text-uppercase small fw-bold text-primary mb-1">Browse collection</p><h2 class="section-title mb-0" id="products">Products made easy</h2></div>
+    <span class="text-secondary">{{ products|length }} item{{ products|length|pluralize }} shown</span>
+  </div>
+  <form method="get" action="{% url 'home' %}" class="panel bg-white p-3 p-md-4 mb-4">
+    <div class="row g-2">
+      <div class="col-12 col-md-6"><label class="visually-hidden" for="searchBox">Search products</label><input id="searchBox" type="search" name="q" class="form-control" placeholder="Search products by name…" value="{{ keyword }}"></div>
+      <div class="col-8 col-md-4"><label class="visually-hidden" for="categorySelect">Category</label><select id="categorySelect" name="category" class="form-select"><option value="">All categories</option>{% for category in categories %}<option value="{{ category.id }}" {% if selected_category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>{% endfor %}</select></div>
+      <div class="col-4 col-md-2 d-grid"><button class="btn btn-primary" type="submit">Search</button></div>
+    </div>
+    {% if keyword or selected_category %}<div class="mt-2"><a href="{% url 'home' %}" class="small">Clear filters</a></div>{% endif %}
+  </form>
+  {% if categories %}
+  <div class="d-flex flex-wrap gap-2 mb-5">
+    <a class="btn btn-sm {% if not selected_category %}btn-dark{% else %}btn-outline-secondary{% endif %} pill" href="{% url 'home' %}">All</a>
+    {% for category in categories %}<a class="btn btn-sm {% if selected_category == category.id|stringformat:'s' %}btn-dark{% else %}btn-outline-secondary{% endif %} pill" href="?category={{ category.id }}">{{ category.name }}</a>{% endfor %}
+  </div>
+  {% endif %}
+  <div class="row g-3 g-lg-4">
+    {% for product in products %}
+    <div class="col-6 col-md-4 col-xl-3">
+      <article class="card product-card h-100 shadow-sm">
+        <a href="{% url 'product_detail' product.id %}" class="text-decoration-none">
+          {% if product.image %}<img src="{{ product.image.url }}" class="card-img-top product-image" alt="{{ product.name }}">
+          {% else %}<div class="product-image d-flex align-items-center justify-content-center fs-1" role="img" aria-label="No product image">🛍️</div>{% endif %}
+        </a>
+        <div class="card-body d-flex flex-column p-3 p-lg-4">
+          <span class="small text-secondary mb-2">{{ product.category.name }}</span>
+          <h3 class="h6 fw-bold"><a class="text-dark text-decoration-none" href="{% url 'product_detail' product.id %}">{{ product.name }}</a></h3>
+          <p class="small text-secondary flex-grow-1">{{ product.description|truncatewords:12 }}</p>
+          <div class="price mb-2">₹{{ product.price|floatformat:2 }}</div>
+          {% if product.stock > 0 %}
+            <form method="post" action="{% url 'add_to_cart' product.id %}">{% csrf_token %}<button class="btn btn-primary w-100 btn-sm" type="submit">Add to cart</button></form>
+          {% else %}<button class="btn btn-secondary w-100 btn-sm" disabled>Out of stock</button>{% endif %}
+        </div>
+      </article>
+    </div>
+    {% empty %}
+    <div class="col-12"><div class="empty-state text-center p-5"><div class="fs-1 mb-2">🔎</div><h3 class="h5">No products found</h3><p class="text-secondary">Try another search or clear your filters.</p><a href="{% url 'home' %}" class="btn btn-primary pill">Show all products</a></div></div>
+    {% endfor %}
+  </div>
+</main>
+{% endblock %}

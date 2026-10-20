@@ -1,0 +1,4 @@
+{% extends 'base.html' %}
+{% block title %}My Profile | ShopSphere{% endblock %}
+{% block content %}<main class="container py-5"><div class="row justify-content-center"><div class="col-12 col-md-8 col-lg-6"><section class="panel bg-white p-4 p-md-5"><div class="fs-1 mb-2">👤</div><h1 class="h3 fw-bold">My profile</h1><p class="text-secondary">Manage your account details.</p><div class="mb-3"><span class="text-secondary small">Username</span><div class="fw-semibold">{{ user.username }}</div></div>
+<form method="post">{% csrf_token %}<div class="mb-4"><label class="form-label" for="email">Email address</label><input id="email" type="email" name="email" value="{{ user.email }}" class="form-control"></div><button class="btn btn-primary" type="submit">Save changes</button><a href="{% url 'my_orders' %}" class="btn btn-outline-secondary ms-2">View my orders</a></form></section></div></div></main>{% endblock %}
