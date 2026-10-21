@@ -3,7 +3,7 @@ from .models import Category,Product,Order,OrderItem
 from django.shortcuts import render, get_object_or_404
 from django.contrib import messages
 from django.db import transaction
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import (login as auth_login,logout,authenticate)
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 
@@ -234,43 +234,8 @@ def checkout(request):
         'items': items,
         'total': total,
     })
-    
-def register(request):
-    if request.user.is_authenticated:
-        return redirect('home')
 
-    if request.method == 'POST':
-        username = request.POST.get('username', '').strip()
-        email = request.POST.get('email', '').strip()
-        password = request.POST.get('password', '')
-        confirm_password = request.POST.get('confirm_password', '')
-
-        if not username or not password:
-            messages.error(request, 'Username and password are required.')
-
-        elif User.objects.filter(username=username).exists():
-            messages.error(request, 'Username already exists.')
-
-        elif password != confirm_password:
-            messages.error(request, 'Passwords do not match.')
-
-        elif len(password) < 8:
-            messages.error(request, 'Password must be at least 8 characters.')
-
-        else:
-            user = User.objects.create_user(
-                username=username,
-                email=email,
-                password=password
-            )
-            login(request, user)
-            messages.success(request, 'Registration successful!')
-            return redirect('home')
-
-    return render(request, 'register.html')
-
-
-def user_login(request):
+def login(request):
     if request.user.is_authenticated:
         return redirect('home')
 
@@ -285,21 +250,68 @@ def user_login(request):
         )
 
         if user is not None:
-            login(request, user)
+            auth_login(request, user)
             messages.success(request, 'Login successful!')
             return redirect('home')
-        else:
-            messages.error(request, 'Invalid username or password.')
+
+        messages.error(request, 'Invalid username or password.')
 
     return render(request, 'login.html')
+  
+def register(request):
+    if request.user.is_authenticated:
+        return redirect('home')
 
+    if request.method == 'POST':
+        username = request.POST.get('username', '').strip()
+        email = request.POST.get('email', '').strip()
+        password = request.POST.get('password', '')
+        confirm_password = request.POST.get('confirm_password', '')
+
+        if not username or not password:
+            messages.error(
+                request,
+                'Username and password are required.'
+            )
+
+        elif User.objects.filter(username=username).exists():
+            messages.error(request, 'Username already exists.')
+
+        elif password != confirm_password:
+            messages.error(request, 'Passwords do not match.')
+
+        elif len(password) < 8:
+            messages.error(
+                request,
+                'Password must be at least 8 characters.'
+            )
+
+        else:
+            User.objects.create_user(
+                username=username,
+                email=email,
+                password=password
+            )
+
+            messages.success(
+                request,
+                'Registration successful! Please log in.'
+            )
+            return redirect('login')
+
+    return render(request, 'register.html')
 
 def user_logout(request):
     if request.method == 'POST':
         logout(request)
-        messages.success(request, 'You have logged out successfully.')
+        messages.success(
+            request,
+            'You have logged out successfully.'
+        )
 
-    return redirect('home')
+    return redirect('login')
+
+    return redirect('login')
 
 @login_required(login_url='login')
 def my_orders(request):
