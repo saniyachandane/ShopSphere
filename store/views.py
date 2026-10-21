@@ -301,17 +301,19 @@ def register(request):
 
     return render(request, 'register.html')
 
+@login_required
 def user_logout(request):
-    if request.method == 'POST':
-        logout(request)
-        messages.success(
-            request,
-            'You have logged out successfully.'
-        )
+    cart = request.session.get('cart', {}).copy()
 
+    logout(request)
+
+    request.session['cart'] = cart
+    request.session.modified = True
+
+    messages.success(request, 'You have logged out successfully.')
     return redirect('login')
 
-    return redirect('login')
+
 
 @login_required(login_url='login')
 def my_orders(request):
